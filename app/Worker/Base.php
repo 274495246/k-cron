@@ -56,7 +56,7 @@ abstract class Base
     public function tick($worker)
     {
         $this->worker = $worker;
-        \swoole_timer_tick(500, function () {
+        \swoole_timer_tick(5000, function () {
             $i = $this->flag;
             while ($i) {
                 $this->checkExit();
