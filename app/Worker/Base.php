@@ -19,6 +19,7 @@ abstract class Base
      */
     private $redis;
     private $queue;
+    private $flag = true;
     /**
      * @var \swoole_process
      */
@@ -42,24 +43,21 @@ abstract class Base
             $this->redis->select($config["db"]);
         }
         $this->queue = $config["queue"];
+        //阀值判断
+        if(isset($config["limit"])){
+            $this->flag = intval($config['limit']);
+        }
     }
 
     public function getQueue()
     {
         return $this->redis->rpop($this->queue);
     }
-
     public function tick($worker)
     {
         $this->worker = $worker;
-        // \swoole_timer_tick(5000, function () {
         \swoole_timer_tick(5000, function () {
-            //判断每次获取队列条数 
-            $i = 1;
-            $limit = $this->redis->llen($this->queue);
-            if($limit > 10){
-                $i = 10;
-            }
+            $i = $this->flag;
             while ($i) {
                 $this->checkExit();
                 $task = $this->getQueue();
@@ -67,16 +65,10 @@ abstract class Base
                     break;
                 }
                 $this->run($task);
-                $i--;
+                if($this->flag !== true){
+                    $i--;
+                }
             }
-            // while (true) {
-            //     $this->checkExit();
-            //     $task = $this->getQueue();
-            //     if (empty($task)) {
-            //         break;
-            //     }
-            //     $this->run($task);
-            // }
         });
     }
 

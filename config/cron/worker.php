@@ -17,7 +17,8 @@ return array(
             "port" => 6379,           // redis端口
             "timeout" => 30,          // 链接超时时间
             "db" => 0,                // redis的db号
-            "queue" => "reload1"          // redis队列名
+            "queue" => "reload1",         // redis队列名
+            "limit" =>  10         // 每次执行出队列的阀值
         ]
     ],
 
