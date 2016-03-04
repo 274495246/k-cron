@@ -61,7 +61,7 @@
             ]
         ]
     ];
-可以通过limit参数控制每次出队列的记录数，避免高并发出队列过频繁导致mysql压力过大
+可以通过limit参数控制每次出队列的记录数，避免高并发出队列过频繁导致mysql压力过大 。
 具体的业务逻辑在app/Workers/ 文件夹下。可以自己定义业务逻辑类，只需要继承library/src/Cron/Worker/Base.php中的EasyWork\Cron\Worker\Base基类就可以
 
 
