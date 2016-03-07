@@ -9,7 +9,7 @@
 
 return array(
     //key是要加载的worker类名
-    App\Worker\ReadBookWorker::class => [
+    App\Worker\LoadingWorker::class => [
         "name" => "queue1",            //备注名
         "processNum" => 1,           //启动的进程数量
         "redis" => [
@@ -17,8 +17,8 @@ return array(
             "port" => 6379,           // redis端口
             "timeout" => 30,          // 链接超时时间
             "db" => 0,                // redis的db号
-            "queue" => "reload1",         // redis队列名
-            "limit" =>  10         // 每次执行出队列的阀值
+            "queue" => "loading",         // redis队列名
+            "limit" =>  400          // 每次执行出队列的阀值
         ]
     ],
 
