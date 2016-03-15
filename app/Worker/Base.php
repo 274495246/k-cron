@@ -25,6 +25,7 @@ abstract class Base
      */
     protected $worker;
     private $ppid = 0;
+    private $param = "";
 
     public function content($config)
     {
@@ -47,11 +48,31 @@ abstract class Base
         if(isset($config["limit"])){
             $this->flag = intval($config['limit']);
         }
+        if(isset($config['param_list'])){
+            $this->param = $config['param_list'];
+        }
     }
 
     public function getQueue()
     {
         return $this->redis->rpop($this->queue);
+    }
+    //参数解析 只支持 带 | 分隔符
+    public function param_parse($task)
+    {
+        $field = explode("|", $this->param);
+        $param = explode("|", $task);
+        $len = count($field);
+        $len1 = count($param);
+        //参数不匹配
+        if($len != $len){
+            return false;
+        }
+        $data = array();
+        foreach ($field as $k => $v) {
+            $data[$v] = $param[$k];
+        }
+        return $data;
     }
     public function tick($worker)
     {

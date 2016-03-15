@@ -24,12 +24,11 @@ class LoadingWorker extends Base
      */
     public function run($task)
     {
-        //echo __FILE__.$task . "\n";
-        // var_dump(json_decode($task,true));
+        $data = $this->param_parse($task);
         $db = new EasyDB('test_123');
-        $rs = $db->insert('log_loading_20160307', json_decode($task, true));
-        // $where = ['name'=>'lisx8'];
-        // $del = $db->delete('user', $where);
+        $rs = $db->insert('log_loading_20160307', $data);
+        // // $where = ['name'=>'lisx8'];
+        // // $del = $db->delete('user', $where);
         echo 'rs:'.$rs."\n";
         if(!$rs){
             $rs = $db->insert('log_loading_20160307', json_decode($task, true));
