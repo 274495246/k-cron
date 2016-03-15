@@ -25,15 +25,16 @@ class LoadingWorker extends Base
     public function run($task)
     {
         $data = $this->param_parse($task);
+        if(empty($data) || !$data){
+            $this->_exit();
+        }
         $db = new EasyDB('test_123');
-        $rs = $db->insert('log_loading_20160307', $data);
-        // // $where = ['name'=>'lisx8'];
-        // // $del = $db->delete('user', $where);
-        echo 'rs:'.$rs."\n";
+        $table = 'log_loading_' . date("Ymd", strtotime($data['logdate']));
+        $rs = $db->insert($table, $data);
         if(!$rs){
-            $rs = $db->insert('log_loading_20160307', json_decode($task, true));
+            $rs = $db->insert($table, $data);
             if(!$rs){
-                echo "ERR...";$this->_exit();
+                Log::log_write("打点数据插入失败:". $task);
             }
         }
         if ($task == 'exit') {

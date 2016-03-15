@@ -65,7 +65,8 @@ abstract class Base
         $len = count($field);
         $len1 = count($param);
         //参数不匹配
-        if($len != $len){
+        if($len != $len1){
+            Log::log_write("参数不匹配:{$this->param}---{$task}");
             return false;
         }
         $data = array();
